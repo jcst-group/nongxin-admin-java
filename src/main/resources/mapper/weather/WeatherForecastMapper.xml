@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nongxin.terminal.dao.weather.WeatherForecastMapper">
+  <resultMap id="BaseResultMap" type="com.nongxin.terminal.entity.weather.WeatherForecast">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="air_press" jdbcType="DECIMAL" property="airPress" />
+    <result column="day_air_temperature" jdbcType="DECIMAL" property="dayAirTemperature" />
+    <result column="day_weather" jdbcType="VARCHAR" property="dayWeather" />
+    <result column="night_air_temperature" jdbcType="DECIMAL" property="nightAirTemperature" />
+    <result column="night_weather" jdbcType="VARCHAR" property="nightWeather" />
+    <result column="day_wind_direction" jdbcType="VARCHAR" property="dayWindDirection" />
+    <result column="day_wind_power" jdbcType="VARCHAR" property="dayWindPower" />
+    <result column="jiangshui" jdbcType="VARCHAR" property="jiangshui" />
+    <result column="night_wind_direction" jdbcType="VARCHAR" property="nightWindDirection" />
+    <result column="night_wind_power" jdbcType="VARCHAR" property="nightWindPower" />
+    <result column="sun_begin_end" jdbcType="VARCHAR" property="sunBeginEnd" />
+    <result column="day" jdbcType="DATE" property="day" />
+    <result column="area_code" jdbcType="VARCHAR" property="areaCode" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, air_press, day_air_temperature, day_weather, night_air_temperature, night_weather, 
+    day_wind_direction, day_wind_power, jiangshui, night_wind_direction, night_wind_power, 
+    sun_begin_end, day, area_code
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from nx_weather_forecast
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from nx_weather_forecast
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.nongxin.terminal.entity.weather.WeatherForecast" useGeneratedKeys="true">
+    insert into nx_weather_forecast (air_press, day_air_temperature, day_weather, 
+      night_air_temperature, night_weather, day_wind_direction, 
+      day_wind_power, jiangshui, night_wind_direction, 
+      night_wind_power, sun_begin_end, day, 
+      area_code)
+    values (#{airPress,jdbcType=DECIMAL}, #{dayAirTemperature,jdbcType=DECIMAL}, #{dayWeather,jdbcType=DECIMAL}, 
+      #{nightAirTemperature,jdbcType=DECIMAL}, #{nightWeather,jdbcType=DECIMAL}, #{dayWindDirection,jdbcType=VARCHAR}, 
+      #{dayWindPower,jdbcType=VARCHAR}, #{jiangshui,jdbcType=VARCHAR}, #{nightWindDirection,jdbcType=VARCHAR}, 
+      #{nightWindPower,jdbcType=VARCHAR}, #{sunBeginEnd,jdbcType=VARCHAR}, #{day,jdbcType=DATE}, 
+      #{areaCode,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.nongxin.terminal.entity.weather.WeatherForecast" useGeneratedKeys="true">
+    insert into nx_weather_forecast
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="airPress != null">
+        air_press,
+      </if>
+      <if test="dayAirTemperature != null">
+        day_air_temperature,
+      </if>
+      <if test="dayWeather != null">
+        day_weather,
+      </if>
+      <if test="nightAirTemperature != null">
+        night_air_temperature,
+      </if>
+      <if test="nightWeather != null">
+        night_weather,
+      </if>
+      <if test="dayWindDirection != null">
+        day_wind_direction,
+      </if>
+      <if test="dayWindPower != null">
+        day_wind_power,
+      </if>
+      <if test="jiangshui != null">
+        jiangshui,
+      </if>
+      <if test="nightWindDirection != null">
+        night_wind_direction,
+      </if>
+      <if test="nightWindPower != null">
+        night_wind_power,
+      </if>
+      <if test="sunBeginEnd != null">
+        sun_begin_end,
+      </if>
+      <if test="day != null">
+        day,
+      </if>
+      <if test="areaCode != null">
+        area_code,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="airPress != null">
+        #{airPress,jdbcType=DECIMAL},
+      </if>
+      <if test="dayAirTemperature != null">
+        #{dayAirTemperature,jdbcType=DECIMAL},
+      </if>
+      <if test="dayWeather != null">
+        #{dayWeather,jdbcType=VARCHAR},
+      </if>
+      <if test="nightAirTemperature != null">
+        #{nightAirTemperature,jdbcType=DECIMAL},
+      </if>
+      <if test="nightWeather != null">
+        #{nightWeather,jdbcType=VARCHAR},
+      </if>
+      <if test="dayWindDirection != null">
+        #{dayWindDirection,jdbcType=VARCHAR},
+      </if>
+      <if test="dayWindPower != null">
+        #{dayWindPower,jdbcType=VARCHAR},
+      </if>
+      <if test="jiangshui != null">
+        #{jiangshui,jdbcType=VARCHAR},
+      </if>
+      <if test="nightWindDirection != null">
+        #{nightWindDirection,jdbcType=VARCHAR},
+      </if>
+      <if test="nightWindPower != null">
+        #{nightWindPower,jdbcType=VARCHAR},
+      </if>
+      <if test="sunBeginEnd != null">
+        #{sunBeginEnd,jdbcType=VARCHAR},
+      </if>
+      <if test="day != null">
+        #{day,jdbcType=DATE},
+      </if>
+      <if test="areaCode != null">
+        #{areaCode,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.nongxin.terminal.entity.weather.WeatherForecast">
+    update nx_weather_forecast
+    <set>
+      <if test="airPress != null">
+        air_press = #{airPress,jdbcType=DECIMAL},
+      </if>
+      <if test="dayAirTemperature != null">
+        day_air_temperature = #{dayAirTemperature,jdbcType=DECIMAL},
+      </if>
+      <if test="dayWeather != null">
+        day_weather = #{dayWeather,jdbcType=DECIMAL},
+      </if>
+      <if test="nightAirTemperature != null">
+        night_air_temperature = #{nightAirTemperature,jdbcType=DECIMAL},
+      </if>
+      <if test="nightWeather != null">
+        night_weather = #{nightWeather,jdbcType=DECIMAL},
+      </if>
+      <if test="dayWindDirection != null">
+        day_wind_direction = #{dayWindDirection,jdbcType=VARCHAR},
+      </if>
+      <if test="dayWindPower != null">
+        day_wind_power = #{dayWindPower,jdbcType=VARCHAR},
+      </if>
+      <if test="jiangshui != null">
+        jiangshui = #{jiangshui,jdbcType=VARCHAR},
+      </if>
+      <if test="nightWindDirection != null">
+        night_wind_direction = #{nightWindDirection,jdbcType=VARCHAR},
+      </if>
+      <if test="nightWindPower != null">
+        night_wind_power = #{nightWindPower,jdbcType=VARCHAR},
+      </if>
+      <if test="sunBeginEnd != null">
+        sun_begin_end = #{sunBeginEnd,jdbcType=VARCHAR},
+      </if>
+      <if test="day != null">
+        day = #{day,jdbcType=DATE},
+      </if>
+      <if test="areaCode != null">
+        area_code = #{areaCode,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.nongxin.terminal.entity.weather.WeatherForecast">
+    update nx_weather_forecast
+    set air_press = #{airPress,jdbcType=DECIMAL},
+      day_air_temperature = #{dayAirTemperature,jdbcType=DECIMAL},
+      day_weather = #{dayWeather,jdbcType=DECIMAL},
+      night_air_temperature = #{nightAirTemperature,jdbcType=DECIMAL},
+      night_weather = #{nightWeather,jdbcType=DECIMAL},
+      day_wind_direction = #{dayWindDirection,jdbcType=VARCHAR},
+      day_wind_power = #{dayWindPower,jdbcType=VARCHAR},
+      jiangshui = #{jiangshui,jdbcType=VARCHAR},
+      night_wind_direction = #{nightWindDirection,jdbcType=VARCHAR},
+      night_wind_power = #{nightWindPower,jdbcType=VARCHAR},
+      sun_begin_end = #{sunBeginEnd,jdbcType=VARCHAR},
+      day = #{day,jdbcType=DATE},
+      area_code = #{areaCode,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="getWeekWeather" resultMap="BaseResultMap">
+    select a.* from nx_weather_forecast a where a.area_code = #{areaCode,jdbcType=VARCHAR}
+    and date(a.day) &gt;= CURDATE() and  date(a.day) &lt; DATE_ADD(CURDATE(), INTERVAL 6 DAY) group by a.day
+  </select>
+
+  <select id="selectByDayAndAreaCode" resultMap="BaseResultMap">
+    select * from nx_weather_forecast where day = #{day,jdbcType=VARCHAR} and area_code = #{areaCode,jdbcType=VARCHAR}
+  </select>
+</mapper>

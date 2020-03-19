@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nongxin.terminal.dao.order.OrderInfoMapper">
+  <resultMap id="BaseResultMap" type="com.nongxin.terminal.entity.order.OrderInfo">
+    <id column="Id" jdbcType="INTEGER" property="id" />
+    <result column="ServiceProject" jdbcType="VARCHAR" property="serviceproject" />
+    <result column="Contact" jdbcType="VARCHAR" property="contact" />
+    <result column="Tel" jdbcType="VARCHAR" property="tel" />
+    <result column="Address" jdbcType="VARCHAR" property="address" />
+    <result column="AppointmentDate" jdbcType="TIMESTAMP" property="appointmentdate" />
+    <result column="Number" jdbcType="INTEGER" property="number" />
+    <result column="ServiceTime" jdbcType="REAL" property="servicetime" />
+    <result column="Price" jdbcType="REAL" property="price" />
+    <result column="Amount" jdbcType="REAL" property="amount" />
+    <result column="CreateDate" jdbcType="TIMESTAMP" property="createdate" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    Id, ServiceProject, Contact, Tel, Address, AppointmentDate, Number, ServiceTime, 
+    Price, Amount, CreateDate
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_orderinfo
+    where Id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_orderinfo
+    where Id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="Id" keyProperty="id" parameterType="com.nongxin.terminal.entity.order.OrderInfo" useGeneratedKeys="true">
+    insert into t_orderinfo (ServiceProject, Contact, Tel, 
+      Address, AppointmentDate, Number, 
+      ServiceTime, Price, Amount, 
+      CreateDate)
+    values (#{serviceproject,jdbcType=VARCHAR}, #{contact,jdbcType=VARCHAR}, #{tel,jdbcType=VARCHAR}, 
+      #{address,jdbcType=VARCHAR}, #{appointmentdate,jdbcType=TIMESTAMP}, #{number,jdbcType=INTEGER}, 
+      #{servicetime,jdbcType=REAL}, #{price,jdbcType=REAL}, #{amount,jdbcType=REAL}, 
+      #{createdate,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" keyColumn="Id" keyProperty="id" parameterType="com.nongxin.terminal.entity.order.OrderInfo" useGeneratedKeys="true">
+    insert into t_orderinfo
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="serviceproject != null">
+        ServiceProject,
+      </if>
+      <if test="contact != null">
+        Contact,
+      </if>
+      <if test="tel != null">
+        Tel,
+      </if>
+      <if test="address != null">
+        Address,
+      </if>
+      <if test="appointmentdate != null">
+        AppointmentDate,
+      </if>
+      <if test="number != null">
+        Number,
+      </if>
+      <if test="servicetime != null">
+        ServiceTime,
+      </if>
+      <if test="price != null">
+        Price,
+      </if>
+      <if test="amount != null">
+        Amount,
+      </if>
+        CreateDate,
+
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="serviceproject != null">
+        #{serviceproject,jdbcType=VARCHAR},
+      </if>
+      <if test="contact != null">
+        #{contact,jdbcType=VARCHAR},
+      </if>
+      <if test="tel != null">
+        #{tel,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="appointmentdate != null">
+        #{appointmentdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="number != null">
+        #{number,jdbcType=INTEGER},
+      </if>
+      <if test="servicetime != null">
+        #{servicetime,jdbcType=REAL},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=REAL},
+      </if>
+      <if test="amount != null">
+        #{amount,jdbcType=REAL},
+      </if>
+
+      now(),
+
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.nongxin.terminal.entity.order.OrderInfo">
+    update t_orderinfo
+    <set>
+      <if test="serviceproject != null">
+        ServiceProject = #{serviceproject,jdbcType=VARCHAR},
+      </if>
+      <if test="contact != null">
+        Contact = #{contact,jdbcType=VARCHAR},
+      </if>
+      <if test="tel != null">
+        Tel = #{tel,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        Address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="appointmentdate != null">
+        AppointmentDate = #{appointmentdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="number != null">
+        Number = #{number,jdbcType=INTEGER},
+      </if>
+      <if test="servicetime != null">
+        ServiceTime = #{servicetime,jdbcType=REAL},
+      </if>
+      <if test="price != null">
+        Price = #{price,jdbcType=REAL},
+      </if>
+      <if test="amount != null">
+        Amount = #{amount,jdbcType=REAL},
+      </if>
+      <if test="createdate != null">
+        CreateDate = #{createdate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where Id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.nongxin.terminal.entity.order.OrderInfo">
+    update t_orderinfo
+    set ServiceProject = #{serviceproject,jdbcType=VARCHAR},
+      Contact = #{contact,jdbcType=VARCHAR},
+      Tel = #{tel,jdbcType=VARCHAR},
+      Address = #{address,jdbcType=VARCHAR},
+      AppointmentDate = #{appointmentdate,jdbcType=TIMESTAMP},
+      Number = #{number,jdbcType=INTEGER},
+      ServiceTime = #{servicetime,jdbcType=REAL},
+      Price = #{price,jdbcType=REAL},
+      Amount = #{amount,jdbcType=REAL},
+      CreateDate = #{createdate,jdbcType=TIMESTAMP}
+    where Id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="getAllList" resultMap="BaseResultMap">
+    select * from t_orderinfo order by createdate desc
+  </select>
+</mapper>

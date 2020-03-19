@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nongxin.terminal.dao.base.SugarContentMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.nongxin.terminal.entity.base.SugarContent">
+        <id column="id" property="id" />
+        <result column="sugar_content" property="sugarContent" />
+        <result column="base_id" property="baseId" />
+        <result column="detection_time" property="detectionTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, sugar_content, base_id, detection_time
+    </sql>
+
+    <insert id="addSugarContent">
+        insert into nx_sugar_content (sugar_content, base_id, detection_time)
+        values
+        <foreach collection="sugarContents" item="item" separator=",">
+            (#{item.sugarContent,jdbcType=INTEGER},#{baseId,jdbcType=INTEGER},#{item.detectionTime,jdbcType=INTEGER})
+        </foreach>
+    </insert>
+
+    <select id="selectByBaseId" resultMap="BaseResultMap">
+        select * from nx_sugar_content where base_id = #{baseId,jdbcType=INTEGER}
+    </select>
+
+    <select id="getBoardSugarContent" resultType="java.util.Map">
+       select sugar_content sugarContent,DATE_FORMAT(detection_time,'%m.%d') detectionTime from nx_sugar_content
+       where base_id = #{baseId,jdbcType=INTEGER}
+       order by detection_time desc limit 6
+    </select>
+
+
+</mapper>

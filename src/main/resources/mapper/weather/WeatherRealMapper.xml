@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nongxin.terminal.dao.weather.WeatherRealMapper">
+  <resultMap id="BaseResultMap" type="com.nongxin.terminal.entity.weather.WeatherReal">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="aqi" jdbcType="REAL" property="aqi" />
+    <result column="co" jdbcType="DECIMAL" property="co" />
+    <result column="no2" jdbcType="DECIMAL" property="no2" />
+    <result column="o3" jdbcType="DECIMAL" property="o3" />
+    <result column="pm10" jdbcType="DECIMAL" property="pm10" />
+    <result column="pm2_5" jdbcType="DECIMAL" property="pm25" />
+    <result column="so2" jdbcType="DECIMAL" property="so2" />
+    <result column="air_tem" jdbcType="DECIMAL" property="airTem" />
+    <result column="air_hum" jdbcType="VARCHAR" property="airHum" />
+    <result column="wind_direction" jdbcType="VARCHAR" property="windDirection" />
+    <result column="wind_power" jdbcType="VARCHAR" property="windPower" />
+    <result column="monitor_time" jdbcType="TIMESTAMP" property="monitorTime" />
+    <result column="area_code" jdbcType="VARCHAR" property="areaCode" />
+    <result column="weather" jdbcType="VARCHAR" property="weather" />
+    <result column="weather_code" jdbcType="VARCHAR" property="weatherCode" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, aqi, co, no2, o3, pm10, pm2_5, so2, air_tem, air_hum, wind_direction, wind_power, 
+    monitor_time, area_code, weather,weather_code
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from nx_weather_real
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from nx_weather_real
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.nongxin.terminal.entity.weather.WeatherReal" useGeneratedKeys="true">
+    insert into nx_weather_real (aqi, co, no2, o3, 
+      pm10, pm2_5, so2, air_tem, 
+      air_hum, wind_direction, wind_power, 
+      monitor_time, area_code, weather
+      )
+    values (#{aqi,jdbcType=REAL}, #{co,jdbcType=DECIMAL}, #{no2,jdbcType=DECIMAL}, #{o3,jdbcType=DECIMAL}, 
+      #{pm10,jdbcType=DECIMAL}, #{pm25,jdbcType=DECIMAL}, #{so2,jdbcType=DECIMAL}, #{airTem,jdbcType=DECIMAL}, 
+      #{airHum,jdbcType=VARCHAR}, #{windDirection,jdbcType=VARCHAR}, #{windPower,jdbcType=VARCHAR}, 
+      #{monitorTime,jdbcType=TIMESTAMP}, #{areaCode,jdbcType=VARCHAR}, #{weather,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.nongxin.terminal.entity.weather.WeatherReal" useGeneratedKeys="true">
+    insert into nx_weather_real
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="aqi != null">
+        aqi,
+      </if>
+      <if test="co != null">
+        co,
+      </if>
+      <if test="no2 != null">
+        no2,
+      </if>
+      <if test="o3 != null">
+        o3,
+      </if>
+      <if test="pm10 != null">
+        pm10,
+      </if>
+      <if test="pm25 != null">
+        pm2_5,
+      </if>
+      <if test="so2 != null">
+        so2,
+      </if>
+      <if test="airTem != null">
+        air_tem,
+      </if>
+      <if test="airHum != null">
+        air_hum,
+      </if>
+      <if test="windDirection != null">
+        wind_direction,
+      </if>
+      <if test="windPower != null">
+        wind_power,
+      </if>
+      <if test="monitorTime != null">
+        monitor_time,
+      </if>
+      <if test="areaCode != null">
+        area_code,
+      </if>
+      <if test="weather != null">
+        weather,
+      </if>
+      <if test="weatherCode != null">
+        weather_code,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="aqi != null">
+        #{aqi,jdbcType=REAL},
+      </if>
+      <if test="co != null">
+        #{co,jdbcType=DECIMAL},
+      </if>
+      <if test="no2 != null">
+        #{no2,jdbcType=DECIMAL},
+      </if>
+      <if test="o3 != null">
+        #{o3,jdbcType=DECIMAL},
+      </if>
+      <if test="pm10 != null">
+        #{pm10,jdbcType=DECIMAL},
+      </if>
+      <if test="pm25 != null">
+        #{pm25,jdbcType=DECIMAL},
+      </if>
+      <if test="so2 != null">
+        #{so2,jdbcType=DECIMAL},
+      </if>
+      <if test="airTem != null">
+        #{airTem,jdbcType=DECIMAL},
+      </if>
+      <if test="airHum != null">
+        #{airHum,jdbcType=VARCHAR},
+      </if>
+      <if test="windDirection != null">
+        #{windDirection,jdbcType=VARCHAR},
+      </if>
+      <if test="windPower != null">
+        #{windPower,jdbcType=VARCHAR},
+      </if>
+      <if test="monitorTime != null">
+        #{monitorTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="areaCode != null">
+        #{areaCode,jdbcType=VARCHAR},
+      </if>
+      <if test="weather != null">
+        #{weather,jdbcType=VARCHAR},
+      </if>
+      <if test="weatherCode != null">
+        #{weatherCode,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.nongxin.terminal.entity.weather.WeatherReal">
+    update nx_weather_real
+    <set>
+      <if test="aqi != null">
+        aqi = #{aqi,jdbcType=REAL},
+      </if>
+      <if test="co != null">
+        co = #{co,jdbcType=DECIMAL},
+      </if>
+      <if test="no2 != null">
+        no2 = #{no2,jdbcType=DECIMAL},
+      </if>
+      <if test="o3 != null">
+        o3 = #{o3,jdbcType=DECIMAL},
+      </if>
+      <if test="pm10 != null">
+        pm10 = #{pm10,jdbcType=DECIMAL},
+      </if>
+      <if test="pm25 != null">
+        pm2_5 = #{pm25,jdbcType=DECIMAL},
+      </if>
+      <if test="so2 != null">
+        so2 = #{so2,jdbcType=DECIMAL},
+      </if>
+      <if test="airTem != null">
+        air_tem = #{airTem,jdbcType=DECIMAL},
+      </if>
+      <if test="airHum != null">
+        air_hum = #{airHum,jdbcType=VARCHAR},
+      </if>
+      <if test="windDirection != null">
+        wind_direction = #{windDirection,jdbcType=VARCHAR},
+      </if>
+      <if test="windPower != null">
+        wind_power = #{windPower,jdbcType=VARCHAR},
+      </if>
+      <if test="monitorTime != null">
+        monitor_time = #{monitorTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="areaCode != null">
+        area_code = #{areaCode,jdbcType=VARCHAR},
+      </if>
+      <if test="weather != null">
+        weather = #{weather,jdbcType=VARCHAR},
+      </if>
+      <if test="weatherCode != null">
+        weather_code = #{weatherCode,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.nongxin.terminal.entity.weather.WeatherReal">
+    update nx_weather_real
+    set aqi = #{aqi,jdbcType=REAL},
+      co = #{co,jdbcType=DECIMAL},
+      no2 = #{no2,jdbcType=DECIMAL},
+      o3 = #{o3,jdbcType=DECIMAL},
+      pm10 = #{pm10,jdbcType=DECIMAL},
+      pm2_5 = #{pm25,jdbcType=DECIMAL},
+      so2 = #{so2,jdbcType=DECIMAL},
+      air_tem = #{airTem,jdbcType=DECIMAL},
+      air_hum = #{airHum,jdbcType=VARCHAR},
+      wind_direction = #{windDirection,jdbcType=VARCHAR},
+      wind_power = #{windPower,jdbcType=VARCHAR},
+      monitor_time = #{monitorTime,jdbcType=TIMESTAMP},
+      area_code = #{areaCode,jdbcType=VARCHAR},
+      weather = #{weather,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="getNowWeather" resultMap="BaseResultMap">
+    select a.* from nx_weather_real a,
+    (select max(monitor_time) as time from nx_weather_real) b
+    where area_code = #{areaCode,jdbcType=VARCHAR} and a.monitor_time = b.time limit 1
+  </select>
+
+  <select id="selectByTimeAndAreaCode" resultMap="BaseResultMap">
+    select * from nx_weather_real where area_code = #{areaCode,jdbcType=VARCHAR} and monitor_time = #{time,jdbcType=VARCHAR}
+  </select>
+</mapper>

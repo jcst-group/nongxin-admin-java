@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nongxin.terminal.dao.nxboard.NxBoardMapper">
+    <resultMap id="BaseResultMap" type="com.nongxin.terminal.vo.nxboard.BaseVo">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="base_name" jdbcType="VARCHAR" property="baseName" />
+        <result column="acreage" jdbcType="DECIMAL" property="baseAcreage" />
+        <result column="longitude" jdbcType="DECIMAL" property="longitude" />
+        <result column="latitude" jdbcType="DECIMAL" property="latitude" />
+        <association property="userList" column="id" select="com.nongxin.terminal.dao.nxboard.NxBoardMapper.getUserByBaseId"/>
+        <association property="techLead" column="id" select="com.nongxin.terminal.dao.nxboard.NxBoardMapper.getTechLead"/>
+        <association property="lotCount" column="id" select="com.nongxin.terminal.dao.nxboard.NxBoardMapper.getLotCount"/>
+        <association property="crop" column="id" select="com.nongxin.terminal.dao.nxboard.NxBoardMapper.getCropByBaseId"/>
+        <collection property="address" column="id" select="com.nongxin.terminal.dao.nxboard.NxBoardMapper.getAddressByBaseId"/>
+    </resultMap>
+
+    <resultMap id="AddressMap" type="com.nongxin.terminal.entity.address.Address">
+        <id column="relate_id" jdbcType="INTEGER" property="relateId" />
+        <result column="relate_type" jdbcType="VARCHAR" property="relateType" />
+        <result column="province" jdbcType="VARCHAR" property="province" />
+        <result column="city" jdbcType="VARCHAR" property="city" />
+        <result column="area" jdbcType="VARCHAR" property="area" />
+        <result column="street" jdbcType="VARCHAR" property="street" />
+        <result column="address" jdbcType="VARCHAR" property="address" />
+        <result column="province_code" jdbcType="VARCHAR" property="provinceCode" />
+        <result column="city_code" jdbcType="VARCHAR" property="cityCode" />
+        <result column="area_code" jdbcType="VARCHAR" property="areaCode" />
+        <result column="steet_code" jdbcType="VARCHAR" property="steetCode" />
+    </resultMap>
+
+    <resultMap id="UserMap" type="com.nongxin.terminal.vo.nxboard.UserVo">
+        <id column="uid" jdbcType="INTEGER" property="uid" />
+        <result column="username" jdbcType="VARCHAR" property="username" />
+        <result column="real_name" jdbcType="VARCHAR" property="realName" />
+        <result column="phone" jdbcType="VARCHAR" property="phone" />
+        <result column="sex" jdbcType="SMALLINT" property="sex" />
+        <result column="status" jdbcType="SMALLINT" property="status" />
+        <collection property="headPic" column="uid" select="com.nongxin.terminal.dao.file.PictureInfoMapper.getUserHeadPic"/>
+    </resultMap>
+
+    <resultMap id="LotMap" type="com.nongxin.terminal.vo.nxboard.LotVo">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="base_id" jdbcType="VARCHAR" property="baseId" />
+        <result column="lot_name" jdbcType="VARCHAR" property="lotName" />
+        <result column="lot_code" jdbcType="VARCHAR" property="lotCode" />
+        <result column="area_code" jdbcType="VARCHAR" property="areaCode" />
+        <result column="lot_acreage" jdbcType="DECIMAL" property="lotAcreage" />
+        <result column="lot_radius" jdbcType="DECIMAL" property="lotRadius" />
+        <result column="longitude" jdbcType="DECIMAL" property="longitude" />
+        <result column="latitude" jdbcType="DECIMAL" property="latitude" />
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="soil_type" jdbcType="INTEGER" property="soilType"/>
+        <association property="crop" column="id" select="com.nongxin.terminal.dao.nxboard.NxBoardMapper.getCropByLotId"/>
+    </resultMap>
+
+    <resultMap id="WorkOrderMap" type="com.nongxin.terminal.vo.nxboard.WorkOrderVo">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="execution_time" jdbcType="TIMESTAMP" property="executionTime" />
+        <result column="solar_term" jdbcType="SMALLINT" property="solarTerm" />
+        <result column="crop_batch_id" jdbcType="INTEGER" property="cropBatchId" />
+        <result column="farming_item_id" jdbcType="INTEGER" property="farmingItemId" />
+        <result column="user_id" jdbcType="INTEGER" property="userId" />
+        <result column="status" jdbcType="SMALLINT" property="status" />
+        <result column="type" jdbcType="SMALLINT" property="type" />
+        <result column="remark" jdbcType="VARCHAR" property="remark" />
+        <result column="farming_id" jdbcType="INTEGER" property="farmingId"/>
+        <result column="examine_time" jdbcType="TIMESTAMP" property="examineTime" />
+        <association property="cropBatch" column="crop_batch_id" select="com.nongxin.terminal.dao.crop.CropBatchMapper.getIdAndNameById"/>
+        <association property="farmingItem" column="farming_item_id" select="com.nongxin.terminal.dao.plant.FarmingItemMapper.getIdAndName"/>
+        <association property="orderContent" column="id" select="com.nongxin.terminal.dao.plant.OrderContentMapper.selectByOrderId"/>
+    </resultMap>
+    <!--根据基地id查询对应农户-->
+    <select id="getUserByBaseId" resultMap="UserMap">
+        select a.* from auth_user a
+        left join ddwb_base_user_rel b on a.uid = b.user_id
+        where b.base_id = #{baseId,jdbcType=INTEGER}
+    </select>
+
+    <!--根据基地id统计地块数量-->
+    <select id="getLotCount" resultType="java.lang.Integer">
+        select count(id) from ddwb_lot where base_id = #{baseId,jdbcType=INTEGER}
+    </select>
+
+    <!--根据基地id获取最新种植作物-->
+    <select id="getCropByBaseId" resultType="java.lang.String">
+        select b.crop_name from ddwb_crop_batch a
+        left join ddwb_crop b on a.crop_id = b.id
+        where a.base_id = #{baseId,jdbcType=INTEGER}
+        and CURRENT_TIME BETWEEN a.start_time and a.end_time
+    </select>
+
+    <!--根据地块id获取最新种植作物-->
+    <select id="getCropByLotId" resultType="java.lang.String">
+        select b.crop_name from ddwb_crop_batch a
+        left join ddwb_crop b on a.crop_id = b.id
+        left join ddwb_batch_lot_rel c on c.crop_batch_id = a.id
+        where c.lot_id = #{lotId,jdbcType=INTEGER}
+        and CURRENT_TIME BETWEEN a.start_time and a.end_time
+    </select>
+
+    <!--根据基地id获取基地地理位置-->
+    <select id="getAddressByBaseId" resultMap="AddressMap">
+        select * from ddwb_address where relate_id = #{baseId,jdbcType=INTEGER} and relate_type = 1
+    </select>
+
+    <!--根据基地id获取基地信息-->
+    <select id="getBaseInfo" resultMap="BaseResultMap">
+        select * from ddwb_base_info where id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <!--根据基地id获取基地技术负责人-->
+    <select id="getTechLead" resultType="java.lang.String">
+        select a.real_name from auth_user a
+        left join ddwb_base_user_rel b on a.uid = b.user_id
+        left join auth_user_role c on a.uid = c.USER_ID
+        where b.base_id = #{baseId,jdbcType=INTEGER} and c.ROLE_ID = 17
+    </select>
+
+    <select id="getLotList" resultMap="LotMap">
+        select a.*,b.soil_type from ddwb_lot a
+        left join ddwb_base_info b on a.base_id = b.id
+        where a.base_id = #{baseId,jdbcType=INTEGER}
+    </select>
+
+    <select id="getWorkOrderByBaseId" resultMap="WorkOrderMap">
+        select * from ddwb_work_order a
+        left join ddwb_crop_batch b on a.crop_batch_id = b.id
+        where base_id = #{baseId,jdbcType=INTEGER}
+        and CURRENT_TIME BETWEEN b.start_time and b.end_time
+    </select>
+</mapper>

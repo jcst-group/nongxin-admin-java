@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nongxin.terminal.dao.project.ThemeManageMapper">
+  <resultMap id="BaseResultMap" type="com.nongxin.terminal.entity.project.ThemeManage">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="project_id" jdbcType="INTEGER" property="projectId" />
+    <result column="theme_name" jdbcType="VARCHAR" property="themeName" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+    <result column="handle_person" jdbcType="VARCHAR" property="handlePerson" />
+    <result column="expect_start_time" jdbcType="TIMESTAMP" property="expectStartTime" />
+    <result column="expect_end_time" jdbcType="TIMESTAMP" property="expectEndTime" />
+    <result column="handle_start_time" jdbcType="TIMESTAMP" property="handleStartTime" />
+    <result column="handle_end_time" jdbcType="TIMESTAMP" property="handleEndTime" />
+    <result column="total_days" jdbcType="INTEGER" property="totalDays" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="status" jdbcType="SMALLINT" property="status" />
+    <result column="parent_id" jdbcType="INTEGER" property="parentId" />
+  </resultMap>
+
+  <resultMap id="BaseResultMap2" type="com.nongxin.terminal.entity.project.ThemeManage">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="project_id" jdbcType="INTEGER" property="projectId" />
+    <result column="theme_name" jdbcType="VARCHAR" property="themeName" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+    <result column="handle_person" jdbcType="VARCHAR" property="handlePerson" />
+    <result column="expect_start_time" jdbcType="TIMESTAMP" property="expectStartTime" />
+    <result column="expect_end_time" jdbcType="TIMESTAMP" property="expectEndTime" />
+    <result column="handle_start_time" jdbcType="TIMESTAMP" property="handleStartTime" />
+    <result column="handle_end_time" jdbcType="TIMESTAMP" property="handleEndTime" />
+    <result column="total_days" jdbcType="INTEGER" property="totalDays" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="status" jdbcType="SMALLINT" property="status" />
+    <result column="parent_id" jdbcType="INTEGER" property="parentId" />
+    <association property="project" column="project_id" select="com.nongxin.terminal.dao.project.ProjectManageMapper.getProjectManageAndParent"/>
+    <association property="children" column="id" select="com.nongxin.terminal.dao.project.ThemeManageMapper.selectByParentId"/>
+    <collection property="fileInfos" column="id" select="com.nongxin.terminal.dao.file.FileInfoMapper.getTaskFile"/>
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, project_id, theme_name, content, handle_person, expect_start_time, expect_end_time, 
+    handle_start_time, handle_end_time, total_days, remark, status, parent_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from nx_theme_manage
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from nx_theme_manage
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+
+  <delete id="deleteById" parameterType="java.lang.Integer">
+    delete from nx_theme_manage
+    where id = #{id,jdbcType=INTEGER} OR parent_id = #{id,jdbcType=INTEGER}
+  </delete>
+
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.nongxin.terminal.entity.project.ThemeManage" useGeneratedKeys="true">
+    insert into nx_theme_manage (project_id, theme_name, content, 
+      handle_person, expect_start_time, expect_end_time, 
+      handle_start_time, handle_end_time, total_days, 
+      remark, status, parent_id
+      )
+    values (#{projectId,jdbcType=INTEGER}, #{themeName,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, 
+      #{handlePerson,jdbcType=VARCHAR}, #{expectStartTime,jdbcType=TIMESTAMP}, #{expectEndTime,jdbcType=TIMESTAMP}, 
+      #{handleStartTime,jdbcType=TIMESTAMP}, #{handleEndTime,jdbcType=TIMESTAMP}, #{totalDays,jdbcType=INTEGER}, 
+      #{remark,jdbcType=VARCHAR}, #{status,jdbcType=SMALLINT}, #{parentId,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.nongxin.terminal.entity.project.ThemeManage" useGeneratedKeys="true">
+    insert into nx_theme_manage
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="projectId != null">
+        project_id,
+      </if>
+      <if test="themeName != null">
+        theme_name,
+      </if>
+      <if test="content != null">
+        content,
+      </if>
+      <if test="handlePerson != null">
+        handle_person,
+      </if>
+      <if test="expectStartTime != null">
+        expect_start_time,
+      </if>
+      <if test="expectEndTime != null">
+        expect_end_time,
+      </if>
+      <if test="handleStartTime != null">
+        handle_start_time,
+      </if>
+      <if test="handleEndTime != null">
+        handle_end_time,
+      </if>
+      <if test="totalDays != null">
+        total_days,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="parentId != null">
+        parent_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="projectId != null">
+        #{projectId,jdbcType=INTEGER},
+      </if>
+      <if test="themeName != null">
+        #{themeName,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="handlePerson != null">
+        #{handlePerson,jdbcType=VARCHAR},
+      </if>
+      <if test="expectStartTime != null">
+        #{expectStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="expectEndTime != null">
+        #{expectEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="handleStartTime != null">
+        #{handleStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="handleEndTime != null">
+        #{handleEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="totalDays != null">
+        #{totalDays,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=SMALLINT},
+      </if>
+      <if test="parentId != null">
+        #{parentId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.nongxin.terminal.entity.project.ThemeManage">
+    update nx_theme_manage
+    <set>
+      <if test="projectId != null">
+        project_id = #{projectId,jdbcType=INTEGER},
+      </if>
+      <if test="themeName != null">
+        theme_name = #{themeName,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null">
+        content = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="handlePerson != null">
+        handle_person = #{handlePerson,jdbcType=VARCHAR},
+      </if>
+      <if test="expectStartTime != null">
+        expect_start_time = #{expectStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="expectEndTime != null">
+        expect_end_time = #{expectEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="handleStartTime != null">
+        handle_start_time = #{handleStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="handleEndTime != null">
+        handle_end_time = #{handleEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="totalDays != null">
+        total_days = #{totalDays,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=SMALLINT},
+      </if>
+      <if test="parentId != null">
+        parent_id = #{parentId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.nongxin.terminal.entity.project.ThemeManage">
+    update nx_theme_manage
+    set project_id = #{projectId,jdbcType=INTEGER},
+      theme_name = #{themeName,jdbcType=VARCHAR},
+      content = #{content,jdbcType=VARCHAR},
+      handle_person = #{handlePerson,jdbcType=VARCHAR},
+      expect_start_time = #{expectStartTime,jdbcType=TIMESTAMP},
+      expect_end_time = #{expectEndTime,jdbcType=TIMESTAMP},
+      handle_start_time = #{handleStartTime,jdbcType=TIMESTAMP},
+      handle_end_time = #{handleEndTime,jdbcType=TIMESTAMP},
+      total_days = #{totalDays,jdbcType=INTEGER},
+      remark = #{remark,jdbcType=VARCHAR},
+      status = #{status,jdbcType=SMALLINT},
+      parent_id = #{parentId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="getThemeManage" resultMap="BaseResultMap2">
+    select a.* from nx_theme_manage a
+    LEFT JOIN nx_project_manage b
+    ON b.id = a.project_id
+    where a.parent_id = -1
+    <if test="projectId != null">
+      AND (b.id = #{projectId} OR b.parent_id = #{projectId})
+    </if>
+    <if test="handlePerson != null">
+      and position(#{handlePerson} in handle_person)
+    </if>
+    <if test="status != null">
+      and status = #{status,jdbcType=SMALLINT}
+    </if>
+  </select>
+
+  <select id="selectByParentId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" />
+    from nx_theme_manage
+    where parent_id = #{parentId,jdbcType=INTEGER}
+  </select>
+
+
+</mapper>

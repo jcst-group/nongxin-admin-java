@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nongxin.terminal.dao.weather.WeatherHourMapper">
+  <resultMap id="BaseResultMap" type="com.nongxin.terminal.entity.weather.WeatherHour">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="weather_code" jdbcType="VARCHAR" property="weatherCode" />
+    <result column="wind_direction" jdbcType="VARCHAR" property="windDirection" />
+    <result column="wind_power" jdbcType="VARCHAR" property="windPower" />
+    <result column="weather" jdbcType="VARCHAR" property="weather" />
+    <result column="temperature" jdbcType="VARCHAR" property="temperature" />
+    <result column="time" jdbcType="TIMESTAMP" property="time" />
+    <result column="area_code" jdbcType="VARCHAR" property="areaCode" />
+  </resultMap>
+
+  <resultMap id="WeatherResultMap" type="com.nongxin.terminal.vo.weather.WeatherVo">
+    <result column="area_name" jdbcType="VARCHAR" property="areaName"/>
+    <result column="area_code" jdbcType="VARCHAR" property="areaCode"/>
+    <collection property="now" column="area_code" select="com.nongxin.terminal.dao.weather.WeatherRealMapper.getNowWeather"/>
+    <collection property="weatherHour" column="area_code" select="com.nongxin.terminal.dao.weather.WeatherHourMapper.getWeather"/>
+    <collection property="weatherDay" column="area_code" select="com.nongxin.terminal.dao.weather.WeatherForecastMapper.getWeekWeather"/>
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, weather_code, wind_direction, wind_power, weather, temperature, time, area_code
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from nx_weather_hour
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from nx_weather_hour
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.nongxin.terminal.entity.weather.WeatherHour" useGeneratedKeys="true">
+    insert into nx_weather_hour (weather_code, wind_direction, wind_power, 
+      weather, temperature, time, 
+      area_code)
+    values (#{weatherCode,jdbcType=VARCHAR}, #{windDirection,jdbcType=VARCHAR}, #{windPower,jdbcType=VARCHAR}, 
+      #{weather,jdbcType=VARCHAR}, #{temperature,jdbcType=VARCHAR}, #{time,jdbcType=TIMESTAMP}, 
+      #{areaCode,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.nongxin.terminal.entity.weather.WeatherHour" useGeneratedKeys="true">
+    insert into nx_weather_hour
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="weatherCode != null">
+        weather_code,
+      </if>
+      <if test="windDirection != null">
+        wind_direction,
+      </if>
+      <if test="windPower != null">
+        wind_power,
+      </if>
+      <if test="weather != null">
+        weather,
+      </if>
+      <if test="temperature != null">
+        temperature,
+      </if>
+      <if test="time != null">
+        time,
+      </if>
+      <if test="areaCode != null">
+        area_code,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="weatherCode != null">
+        #{weatherCode,jdbcType=VARCHAR},
+      </if>
+      <if test="windDirection != null">
+        #{windDirection,jdbcType=VARCHAR},
+      </if>
+      <if test="windPower != null">
+        #{windPower,jdbcType=VARCHAR},
+      </if>
+      <if test="weather != null">
+        #{weather,jdbcType=VARCHAR},
+      </if>
+      <if test="temperature != null">
+        #{temperature,jdbcType=VARCHAR},
+      </if>
+      <if test="time != null">
+        #{time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="areaCode != null">
+        #{areaCode,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.nongxin.terminal.entity.weather.WeatherHour">
+    update nx_weather_hour
+    <set>
+      <if test="weatherCode != null">
+        weather_code = #{weatherCode,jdbcType=VARCHAR},
+      </if>
+      <if test="windDirection != null">
+        wind_direction = #{windDirection,jdbcType=VARCHAR},
+      </if>
+      <if test="windPower != null">
+        wind_power = #{windPower,jdbcType=VARCHAR},
+      </if>
+      <if test="weather != null">
+        weather = #{weather,jdbcType=VARCHAR},
+      </if>
+      <if test="temperature != null">
+        temperature = #{temperature,jdbcType=VARCHAR},
+      </if>
+      <if test="time != null">
+        time = #{time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="areaCode != null">
+        area_code = #{areaCode,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.nongxin.terminal.entity.weather.WeatherHour">
+    update nx_weather_hour
+    set weather_code = #{weatherCode,jdbcType=VARCHAR},
+      wind_direction = #{windDirection,jdbcType=VARCHAR},
+      wind_power = #{windPower,jdbcType=VARCHAR},
+      weather = #{weather,jdbcType=VARCHAR},
+      temperature = #{temperature,jdbcType=VARCHAR},
+      time = #{time,jdbcType=TIMESTAMP},
+      area_code = #{areaCode,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="getWeather" resultMap="BaseResultMap">
+    select DISTINCT* from nx_weather_hour where area_code = #{areaCode,jdbcType=VARCHAR}
+    and time >=  NOW() - interval 1 hour GROUP BY time order by time asc
+  </select>
+
+  <select id="getWeatherByArea" resultMap="WeatherResultMap">
+    select area_name,area_code from ddwb_area
+    <where>
+      <if test="areaName!=null">
+        short_name = #{areaName,jdbcType=VARCHAR}
+      </if>
+      <if test="areaLevel!=null">
+        and area_level = #{areaLevel,jdbcType=VARCHAR}
+      </if>
+    </where>
+
+  </select>
+
+  <select id="getWeatherByCode" resultMap="WeatherResultMap">
+    select area_name,area_code from ddwb_area where area_code = #{areaCode,jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectByTimeAndCode" resultMap="BaseResultMap">
+    select * from nx_weather_hour where time = #{time,jdbcType=TIMESTAMP} and area_code = #{areaCode,jdbcType=VARCHAR}
+  </select>
+
+  <select id="getLocationWeather" resultMap="WeatherResultMap">
+    select area_name,area_code from ddwb_area where position(#{fullName,jdbcType=VARCHAR} in full_name)
+  </select>
+
+</mapper>

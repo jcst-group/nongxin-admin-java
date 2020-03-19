@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nongxin.terminal.dao.plant.LotCalRelMapper">
+  <resultMap id="BaseResultMap" type="com.nongxin.terminal.entity.plant.LotCalRel">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="lot_id" jdbcType="INTEGER" property="lotId" />
+    <result column="cal_id" jdbcType="INTEGER" property="calId" />
+    <result column="scale" jdbcType="DECIMAL" property="scale" />
+    <result column="crop_id" jdbcType="INTEGER" property="cropId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, lot_id, cal_id, scale, crop_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from ddwb_lot_cal_rel
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from ddwb_lot_cal_rel
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.nongxin.terminal.entity.plant.LotCalRel" useGeneratedKeys="true">
+    insert into ddwb_lot_cal_rel (lot_id, cal_id, scale, 
+      crop_id)
+    values (#{lotId,jdbcType=INTEGER}, #{calId,jdbcType=INTEGER}, #{scale,jdbcType=DECIMAL}, 
+      #{cropId,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.nongxin.terminal.entity.plant.LotCalRel" useGeneratedKeys="true">
+    insert into ddwb_lot_cal_rel
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="lotId != null">
+        lot_id,
+      </if>
+      <if test="calId != null">
+        cal_id,
+      </if>
+      <if test="scale != null">
+        scale,
+      </if>
+      <if test="cropId != null">
+        crop_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="lotId != null">
+        #{lotId,jdbcType=INTEGER},
+      </if>
+      <if test="calId != null">
+        #{calId,jdbcType=INTEGER},
+      </if>
+      <if test="scale != null">
+        #{scale,jdbcType=DECIMAL},
+      </if>
+      <if test="cropId != null">
+        #{cropId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.nongxin.terminal.entity.plant.LotCalRel">
+    update ddwb_lot_cal_rel
+    <set>
+      <if test="lotId != null">
+        lot_id = #{lotId,jdbcType=INTEGER},
+      </if>
+      <if test="calId != null">
+        cal_id = #{calId,jdbcType=INTEGER},
+      </if>
+      <if test="scale != null">
+        scale = #{scale,jdbcType=DECIMAL},
+      </if>
+      <if test="cropId != null">
+        crop_id = #{cropId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.nongxin.terminal.entity.plant.LotCalRel">
+    update ddwb_lot_cal_rel
+    set lot_id = #{lotId,jdbcType=INTEGER},
+      cal_id = #{calId,jdbcType=INTEGER},
+      scale = #{scale,jdbcType=DECIMAL},
+      crop_id = #{cropId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="getLotCal" parameterType="com.nongxin.terminal.entity.plant.LotCalRel" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from ddwb_lot_cal_rel
+    where lot_id = #{lotId,jdbcType=INTEGER}
+    and cal_id = #{calId,jdbcType=INTEGER} and crop_id = #{cropId,jdbcType=INTEGER}
+  </select>
+
+  <select id="getLotCalUseCount" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    SELECT COUNT(a.id) FROM ddwb_crop_batch a
+    INNER JOIN ddwb_planting_plan b
+    ON a.plan_id = b.id
+    INNER JOIN ddwb_batch_lot_rel c
+    ON a.id = c.crop_batch_id
+    WHERE c.lot_id = #{lotId,jdbcType=INTEGER} AND a.`status` != 3
+    AND ((a.crop_id,b.cal_id) IN (SELECT crop_id,cal_id FROM ddwb_lot_cal_rel WHERE id = #{lotCalId,jdbcType=INTEGER}))
+  </select>
+
+</mapper>

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nongxin.terminal.dao.weather.WeatherHistoryMapper">
+  <resultMap id="BaseResultMap" type="com.nongxin.terminal.entity.weather.WeatherHistory">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="aqi" jdbcType="REAL" property="aqi" />
+    <result column="min_temperature" jdbcType="DECIMAL" property="minTemperature" />
+    <result column="max_temperature" jdbcType="DECIMAL" property="maxTemperature" />
+    <result column="wind_direction" jdbcType="VARCHAR" property="windDirection" />
+    <result column="wind_power" jdbcType="VARCHAR" property="windPower" />
+    <result column="day" jdbcType="VARCHAR" property="day" />
+    <result column="area_code" jdbcType="VARCHAR" property="areaCode" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, aqi, min_temperature, max_temperature, wind_direction, wind_power, day, area_code
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from nx_weather_history
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from nx_weather_history
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.nongxin.terminal.entity.weather.WeatherHistory" useGeneratedKeys="true">
+    insert into nx_weather_history (aqi, min_temperature, max_temperature, 
+      wind_direction, wind_power, day, 
+      area_code)
+    values (#{aqi,jdbcType=REAL}, #{minTemperature,jdbcType=DECIMAL}, #{maxTemperature,jdbcType=DECIMAL}, 
+      #{windDirection,jdbcType=VARCHAR}, #{windPower,jdbcType=VARCHAR}, #{day,jdbcType=VARCHAR}, 
+      #{areaCode,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.nongxin.terminal.entity.weather.WeatherHistory" useGeneratedKeys="true">
+    insert into nx_weather_history
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="aqi != null">
+        aqi,
+      </if>
+      <if test="minTemperature != null">
+        min_temperature,
+      </if>
+      <if test="maxTemperature != null">
+        max_temperature,
+      </if>
+      <if test="windDirection != null">
+        wind_direction,
+      </if>
+      <if test="windPower != null">
+        wind_power,
+      </if>
+      <if test="day != null">
+        day,
+      </if>
+      <if test="areaCode != null">
+        area_code,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="aqi != null">
+        #{aqi,jdbcType=REAL},
+      </if>
+      <if test="minTemperature != null">
+        #{minTemperature,jdbcType=DECIMAL},
+      </if>
+      <if test="maxTemperature != null">
+        #{maxTemperature,jdbcType=DECIMAL},
+      </if>
+      <if test="windDirection != null">
+        #{windDirection,jdbcType=VARCHAR},
+      </if>
+      <if test="windPower != null">
+        #{windPower,jdbcType=VARCHAR},
+      </if>
+      <if test="day != null">
+        #{day,jdbcType=VARCHAR},
+      </if>
+      <if test="areaCode != null">
+        #{areaCode,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.nongxin.terminal.entity.weather.WeatherHistory">
+    update nx_weather_history
+    <set>
+      <if test="aqi != null">
+        aqi = #{aqi,jdbcType=REAL},
+      </if>
+      <if test="minTemperature != null">
+        min_temperature = #{minTemperature,jdbcType=DECIMAL},
+      </if>
+      <if test="maxTemperature != null">
+        max_temperature = #{maxTemperature,jdbcType=DECIMAL},
+      </if>
+      <if test="windDirection != null">
+        wind_direction = #{windDirection,jdbcType=VARCHAR},
+      </if>
+      <if test="windPower != null">
+        wind_power = #{windPower,jdbcType=VARCHAR},
+      </if>
+      <if test="day != null">
+        day = #{day,jdbcType=VARCHAR},
+      </if>
+      <if test="areaCode != null">
+        area_code = #{areaCode,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.nongxin.terminal.entity.weather.WeatherHistory">
+    update nx_weather_history
+    set aqi = #{aqi,jdbcType=REAL},
+      min_temperature = #{minTemperature,jdbcType=DECIMAL},
+      max_temperature = #{maxTemperature,jdbcType=DECIMAL},
+      wind_direction = #{windDirection,jdbcType=VARCHAR},
+      wind_power = #{windPower,jdbcType=VARCHAR},
+      day = #{day,jdbcType=VARCHAR},
+      area_code = #{areaCode,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectByDayAndCode" resultMap="BaseResultMap">
+    select * from nx_weather_history where day = #{day,jdbcType=VARCHAR} and area_code = #{areaCode,jdbcType=VARCHAR}
+  </select>
+</mapper>

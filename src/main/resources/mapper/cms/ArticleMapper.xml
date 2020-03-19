@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nongxin.terminal.dao.cms.ArticleMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.nongxin.terminal.entity.cms.Article">
+        <id column="id" property="id" />
+        <result column="category_id" property="categoryId" />
+        <result column="title" property="title" />
+        <result column="content" property="content" />
+        <result column="author" property="author" />
+        <result column="crop_from" property="cropFrom" />
+        <result column="http_url" property="httpUrl" />
+        <result column="create_time" property="createTime" />
+        <result column="create_id" property="createId" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_id" property="updateId" />
+        <result column="status" property="status" />
+    </resultMap>
+
+    <resultMap id="BaseResultMap2" type="com.nongxin.terminal.entity.cms.Article">
+        <id column="id" property="id" />
+        <result column="category_id" property="categoryId" />
+        <result column="title" property="title" />
+        <result column="content" property="content" />
+        <result column="author" property="author" />
+        <result column="crop_from" property="cropFrom" />
+        <result column="http_url" property="httpUrl" />
+        <result column="create_time" property="createTime" />
+        <result column="create_id" property="createId" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_id" property="updateId" />
+        <result column="status" property="status" />
+        <association property="category" javaType="com.nongxin.terminal.entity.cms.Category">
+            <id column="category_id" property="id" />
+            <result column="category" property="category" />
+        </association>
+        <collection property="pictureInfos" column="id" select="com.nongxin.terminal.dao.file.PictureInfoMapper.getArticlePic"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, category_id, title, content, author, crop_from, http_url, create_time, create_id, update_time, update_id, status
+    </sql>
+
+    <select id="getArticle" resultMap="BaseResultMap2">
+      SELECT a.*,b.category FROM nx_article a
+      INNER JOIN nx_category b
+      ON a.category_id = b.id
+      <where>
+          <if test="article.categoryId != null">
+              and category_id = #{article.categoryId,jdbcType=INTEGER}
+          </if>
+          <if test="article.author != null">
+              and position(#{article.author,jdbcType=VARCHAR} in author)
+          </if>
+          <if test="article.title != null">
+              and position(#{article.title,jdbcType=VARCHAR} in title)
+          </if>
+      </where>
+    </select>
+
+    <select id="selectById" parameterType="java.lang.Integer" resultMap="BaseResultMap2">
+      SELECT a.*,b.category FROM nx_article a
+      INNER JOIN nx_category b
+      ON a.category_id = b.id
+      where a.id = #{id,jdbcType=INTEGER}
+    </select>
+
+</mapper>

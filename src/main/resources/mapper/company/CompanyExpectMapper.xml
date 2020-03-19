@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nongxin.terminal.dao.company.CompanyExpectMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.nongxin.terminal.entity.company.CompanyExpect">
+        <id column="id" property="id" />
+        <result column="expect" property="expect" />
+        <result column="company_id" property="companyId" />
+    </resultMap>
+
+    <resultMap id="BaseResultMap2" type="com.nongxin.terminal.entity.company.CompanyExpect">
+        <id column="id" property="id" />
+        <result column="expect" property="expect" />
+        <result column="company_id" property="companyId" />
+        <association property="pictureInfo" column="id" select="com.nongxin.terminal.dao.file.PictureInfoMapper.getExpectPic"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, expect,company_id
+    </sql>
+
+    <select id="getCompanyExpect" resultMap="BaseResultMap2">
+        select * from nx_company_expect
+        <where>
+            <if test="companyId != null">
+                company_id = #{companyId}
+            </if>
+        </where>
+    </select>
+
+</mapper>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nongxin.terminal.dao.envmonitor.EquipmentFactoryMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.nongxin.terminal.entity.envmonitor.EquipmentFactory">
+        <id column="id" property="id" />
+        <result column="factory_name" property="factoryName" />
+        <result column="contact_man" property="contactMan" />
+        <result column="phone" property="phone" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="item" property="item" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, factory_name, contact_man, phone, create_time, update_time, item
+    </sql>
+
+    <select id="getItem" resultType="java.lang.String">
+        select item from ddwb_equipment_factory where id = #{id,jdbcType=INTEGER}
+    </select>
+
+</mapper>

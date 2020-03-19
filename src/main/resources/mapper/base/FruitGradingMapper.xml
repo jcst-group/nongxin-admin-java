@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nongxin.terminal.dao.base.FruitGradingMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.nongxin.terminal.entity.base.FruitGrading">
+        <id column="id" property="id" />
+        <result column="fruit_color" property="fruitColor" />
+        <result column="fruit_shape" property="fruitShape" />
+        <result column="fruit_plumpness" property="fruitPlumpness" />
+        <result column="base_id" property="baseId" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, fruit_color, fruit_shape, fruit_plumpness, base_id
+    </sql>
+
+    <select id="selectByBaseId" resultMap="BaseResultMap">
+      select * from nx_fruit_grading where base_id = #{baseId}
+    </select>
+
+</mapper>

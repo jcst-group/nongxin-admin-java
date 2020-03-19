@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nongxin.terminal.dao.weather.WeatherAreaMapper">
+  <resultMap id="BaseResultMap" type="com.nongxin.terminal.entity.weather.WeatherArea">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="area_name" jdbcType="VARCHAR" property="areaName" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, area_name
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from nx_weather_area
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from nx_weather_area
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.nongxin.terminal.entity.weather.WeatherArea" useGeneratedKeys="true">
+    insert into nx_weather_area (area_name)
+    values (#{areaName,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.nongxin.terminal.entity.weather.WeatherArea" useGeneratedKeys="true">
+    insert into nx_weather_area
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="areaName != null">
+        area_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="areaName != null">
+        #{areaName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.nongxin.terminal.entity.weather.WeatherArea">
+    update nx_weather_area
+    <set>
+      <if test="areaName != null">
+        area_name = #{areaName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.nongxin.terminal.entity.weather.WeatherArea">
+    update nx_weather_area
+    set area_name = #{areaName,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="getList" resultMap="BaseResultMap">
+    select * from nx_weather_area
+  </select>
+
+  <select id="selectByAreaName" resultMap="BaseResultMap">
+    select * from nx_weather_area where area_name = #{areaName,jdbcType=VARCHAR}
+  </select>
+</mapper>

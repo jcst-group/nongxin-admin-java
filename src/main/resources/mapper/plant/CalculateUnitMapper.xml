@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nongxin.terminal.dao.plant.CalculateUnitMapper">
+  <resultMap id="BaseResultMap" type="com.nongxin.terminal.entity.plant.CalculateUnit">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="unit" jdbcType="VARCHAR" property="unit" />
+    <result column="material_unit" jdbcType="VARCHAR" property="materialUnit" />
+    <result column="personnel_unit" jdbcType="VARCHAR" property="personnelUnit" />
+    <result column="device_unit" jdbcType="VARCHAR" property="deviceUnit" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, unit, material_unit, personnel_unit, device_unit
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from ddwb_calculate_unit
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from ddwb_calculate_unit
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.nongxin.terminal.entity.plant.CalculateUnit" useGeneratedKeys="true">
+    insert into ddwb_calculate_unit (unit, material_unit, personnel_unit, 
+      device_unit)
+    values (#{unit,jdbcType=VARCHAR}, #{materialUnit,jdbcType=VARCHAR}, #{personnelUnit,jdbcType=VARCHAR}, 
+      #{deviceUnit,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.nongxin.terminal.entity.plant.CalculateUnit" useGeneratedKeys="true">
+    insert into ddwb_calculate_unit
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="unit != null">
+        unit,
+      </if>
+      <if test="materialUnit != null">
+        material_unit,
+      </if>
+      <if test="personnelUnit != null">
+        personnel_unit,
+      </if>
+      <if test="deviceUnit != null">
+        device_unit,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="unit != null">
+        #{unit,jdbcType=VARCHAR},
+      </if>
+      <if test="materialUnit != null">
+        #{materialUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="personnelUnit != null">
+        #{personnelUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceUnit != null">
+        #{deviceUnit,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.nongxin.terminal.entity.plant.CalculateUnit">
+    update ddwb_calculate_unit
+    <set>
+      <if test="unit != null">
+        unit = #{unit,jdbcType=VARCHAR},
+      </if>
+      <if test="materialUnit != null">
+        material_unit = #{materialUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="personnelUnit != null">
+        personnel_unit = #{personnelUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceUnit != null">
+        device_unit = #{deviceUnit,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.nongxin.terminal.entity.plant.CalculateUnit">
+    update ddwb_calculate_unit
+    set unit = #{unit,jdbcType=VARCHAR},
+      material_unit = #{materialUnit,jdbcType=VARCHAR},
+      personnel_unit = #{personnelUnit,jdbcType=VARCHAR},
+      device_unit = #{deviceUnit,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="getCalculateUnit" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from ddwb_calculate_unit
+  </select>
+
+  <select id="getAllCalculateUnit" resultMap="BaseResultMap">
+    select id, unit
+    from ddwb_calculate_unit
+  </select>
+
+  <select id="selectByFarmingId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    SELECT a.* FROM ddwb_calculate_unit a
+    INNER JOIN ddwb_planting_plan b
+    ON b.cal_id = a.id
+    INNER JOIN ddwb_plan_year c
+    ON b.id = c.plan_id
+    INNER JOIN ddwb_farming d
+    ON d.plan_year_id = c.id
+    WHERE d.id = #{farmingId,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectByTemporaryFarming" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+	SELECT b.* FROM ddwb_farming_cal_rel a
+    INNER JOIN ddwb_calculate_unit b
+    ON a.cal_id = b.id
+    WHERE a.farming_id = #{farmingId,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectByCropId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+	SELECT a.id,a.unit FROM ddwb_calculate_unit a
+    LEFT JOIN ddwb_crop b
+    ON a.id = b.cal_id
+    WHERE b.id = #{cropId,jdbcType=INTEGER}
+  </select>
+
+</mapper>
