@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 public class SmsUtil {
 
 
-    DefaultProfile profile = DefaultProfile.getProfile("cn-hangzhou","LTAIwIXlxJpTRslY","qQ28WMXIs1doY2V0VSFCC5WVdEn7x5");
+    DefaultProfile profile = DefaultProfile.getProfile("cn-hangzhou","1","1");
     IAcsClient client = new DefaultAcsClient(profile);
 
     CommonRequest request = new CommonRequest();
